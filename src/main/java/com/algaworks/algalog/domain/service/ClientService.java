@@ -15,6 +15,11 @@ public class ClientService {
 
 	private ClientRepository clientRepository;
 	
+	public Client findOrElseThrow(Long clientId) {
+		return clientRepository.findById(clientId)
+				.orElseThrow( () -> new ClientDomainException("Client could not be retrieved."));
+	}
+	
 	@Transactional
 	public Client save(Client client) {
 		boolean emailInUse = clientRepository.findByEmail(client.getEmail())
