@@ -1,7 +1,5 @@
 package com.algaworks.algalog.domain.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +24,5 @@ public class DeliveryOrderRequestService {
 		delivery.setClient(client);
 		
 		return deliveryRepository.save(delivery);
-	}
-
-	public List<Delivery> findAll() {
-	
-		return deliveryRepository.findAll();
 	}
 }
