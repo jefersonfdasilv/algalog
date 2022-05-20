@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
+import com.algaworks.algalog.domain.exception.DomainException;
 import com.algaworks.algalog.domain.validation.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -83,5 +84,25 @@ public class Delivery {
 		return occurrence;
 		
 	}
+
+	public void endNow() {
+		
+		if(canNotBeFinished()) {
+			throw new DomainException("Delivery cannot be completed.");
+		}
+		
+		status = DeliveryStatus.COMPLETED;
+		deliveryDate = OffsetDateTime.now();
+	}
+	
+	public boolean canItBeFinished() {
+		return this.getStatus().equals(DeliveryStatus.PENDING);
+	}
+	
+	public boolean canNotBeFinished() {
+		return !canItBeFinished();
+	}
+	
+	
 
 }
