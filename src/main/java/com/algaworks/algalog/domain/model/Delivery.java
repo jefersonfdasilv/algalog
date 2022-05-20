@@ -2,7 +2,10 @@ package com.algaworks.algalog.domain.model;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
@@ -59,9 +63,25 @@ public class Delivery {
 	@JsonProperty(access = Access.READ_ONLY)
 	private OffsetDateTime deliveryDate;
 	
+	@OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
+	private List<Occurrence> occurrences;
+	
 	public Delivery() {
 		status = DeliveryStatus.PENDING;
 		orderDate = OffsetDateTime.now();
+		occurrences = new ArrayList<Occurrence>();
+	}
+
+	public Occurrence addOccurrence(String description) {
+		
+		var occurrence = new Occurrence();
+		occurrence.setDescription(description);
+		occurrence.setDelivery(this);
+		
+		occurrences.add(occurrence);
+
+		return occurrence;
+		
 	}
 
 }

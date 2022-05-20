@@ -49,7 +49,6 @@ public class DeliveryController {
 
 	@GetMapping("/{deliveryId}")
 	public ResponseEntity<DeliveryModelResponse> find(@PathVariable Long deliveryId) {
-
 		return deliveryRepository.findById(deliveryId).map(delivery -> {
 			return ResponseEntity.ok(deliveryAssembler.toModel(delivery));
 		}).orElse(ResponseEntity.notFound().build());

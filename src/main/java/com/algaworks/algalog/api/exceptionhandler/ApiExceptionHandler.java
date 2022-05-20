@@ -14,6 +14,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.algaworks.algalog.domain.exception.ClientDomainException;
+import com.algaworks.algalog.domain.exception.DomainException;
+import com.algaworks.algalog.domain.exception.EntityNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -42,6 +44,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(ClientDomainException.class)
 	public ResponseEntity<Object> handleClientDomainException(ClientDomainException ex, WebRequest request) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
+		return handleDomainException(ex, request, status);
+	}
+	
+	@ExceptionHandler(EntityNotFoundException.class)
+	public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		return handleDomainException(ex, request, status);
+	}
+	
+	@ExceptionHandler(DomainException.class)
+	public ResponseEntity<Object> handleDomainException(DomainException ex, WebRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		return handleDomainException(ex, request, status);
+	}
+	
+	private ResponseEntity<Object> handleDomainException(DomainException ex, WebRequest request, HttpStatus status) {
 		var error = new Error();
 		error.setStatus(status.value());
 		error.setTitle(ex.getMessage());
